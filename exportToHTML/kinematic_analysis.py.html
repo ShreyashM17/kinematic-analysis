@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>kinematic_analysis.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+kinematic_analysis.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">math </span><span class="s0">import </span><span class="s1">cos</span><span class="s0">, </span><span class="s1">sin</span><span class="s0">, </span><span class="s1">acos</span><span class="s0">, </span><span class="s1">asin</span><span class="s0">, </span><span class="s1">sqrt</span><span class="s0">, </span><span class="s1">pow</span><span class="s0">, </span><span class="s1">radians</span><span class="s0">, </span><span class="s1">degrees</span>
+
+
+<span class="s0">class </span><span class="s1">Kinematic_analysis:</span>
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">length</span><span class="s0">, </span><span class="s1">radius):</span>
+        <span class="s1">self.length = length</span>
+        <span class="s1">self.radius = radius</span>
+        <span class="s1">self.oblique_ratio = self.length / self.radius</span>
+        <span class="s1">self.phi = </span><span class="s2">0</span>
+        <span class="s1">self.theta = </span><span class="s2">0</span>
+
+    <span class="s3"># Conversion from theta to phi and viceversa in radians</span>
+    <span class="s0">def </span><span class="s1">theta_to_phi(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">self.theta = radians(theta)</span>
+        <span class="s1">self.phi = asin(sin(self.theta)/self.oblique_ratio)</span>
+        <span class="s0">return </span><span class="s1">degrees(self.phi)</span>
+
+    <span class="s0">def </span><span class="s1">phi_to_theta(self</span><span class="s0">, </span><span class="s1">phi):</span>
+        <span class="s1">self.phi = radians(phi)</span>
+        <span class="s1">self.theta = asin(sin(phi) * self.oblique_ratio)</span>
+        <span class="s0">return </span><span class="s1">self.theta</span>
+
+    <span class="s0">def </span><span class="s1">get_value_theta_radians(self):</span>
+        <span class="s0">return </span><span class="s1">self.theta</span>
+
+    <span class="s0">def </span><span class="s1">get_value_phi_radians(self):</span>
+        <span class="s0">return </span><span class="s1">self.phi</span>
+
+    <span class="s0">def </span><span class="s1">get_value_theta_in_degree(self):</span>
+        <span class="s0">return </span><span class="s1">degrees(self.theta)</span>
+
+    <span class="s0">def </span><span class="s1">get_value_phi_in_degree(self):</span>
+        <span class="s0">return </span><span class="s1">degrees(self.phi)</span>
+
+
+<span class="s0">class </span><span class="s1">Slider(Kinematic_analysis):</span>
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">length</span><span class="s0">, </span><span class="s1">radius</span><span class="s0">, </span><span class="s1">omega=</span><span class="s2">0</span><span class="s1">):</span>
+        <span class="s1">super().__init__(length</span><span class="s0">, </span><span class="s1">radius)</span>
+        <span class="s1">self.omega = </span><span class="s2">2</span><span class="s1">*</span><span class="s2">3.142</span><span class="s1">*omega/</span><span class="s2">60</span>
+        <span class="s1">self.distance = </span><span class="s2">0</span>
+        <span class="s1">self.vel = </span><span class="s2">0</span>
+        <span class="s1">self.acc = </span><span class="s2">0</span>
+
+    <span class="s0">def </span><span class="s1">distance_travelled_by_slider(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">theta = radians(theta)</span>
+        <span class="s1">n = self.oblique_ratio</span>
+        <span class="s1">self.distance = self.radius * (</span><span class="s2">1 </span><span class="s1">- cos(theta) + n - (sqrt(pow(n</span><span class="s0">, </span><span class="s2">2</span><span class="s1">) - pow(sin(theta)</span><span class="s0">, </span><span class="s2">2</span><span class="s1">))))</span>
+        <span class="s0">return </span><span class="s1">self.distance</span>
+
+    <span class="s0">def </span><span class="s1">velocity(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">theta = radians(theta)</span>
+        <span class="s1">self.vel = self.omega * self.radius * (sin(theta) + (sin(</span><span class="s2">2 </span><span class="s1">* theta) / (</span><span class="s2">2 </span><span class="s1">* self.oblique_ratio)))</span>
+        <span class="s0">return </span><span class="s1">self.vel</span>
+
+    <span class="s0">def </span><span class="s1">acceleration(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">theta = radians(theta)</span>
+        <span class="s1">self.acc = self.omega * self.omega * self.radius * (cos(theta) + (cos(</span><span class="s2">2 </span><span class="s1">* theta) / self.oblique_ratio))</span>
+        <span class="s0">return </span><span class="s1">self.acc</span>
+
+
+<span class="s0">class </span><span class="s1">Connecting_rod(Kinematic_analysis):</span>
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">length</span><span class="s0">, </span><span class="s1">radius</span><span class="s0">, </span><span class="s1">omega=</span><span class="s2">0</span><span class="s1">):</span>
+        <span class="s1">super().__init__(length</span><span class="s0">, </span><span class="s1">radius)</span>
+        <span class="s1">self.omega = </span><span class="s2">2</span><span class="s1">*</span><span class="s2">3.142</span><span class="s1">*omega/</span><span class="s2">60</span>
+        <span class="s1">self.radial_vel = </span><span class="s2">0</span>
+        <span class="s1">self.radial_acc = </span><span class="s2">0</span>
+
+    <span class="s0">def </span><span class="s1">angular_displacement(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">angular_dis = self.theta_to_phi(theta)</span>
+        <span class="s0">return </span><span class="s1">angular_dis</span>
+
+    <span class="s0">def </span><span class="s1">radial_velocity(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">theta = radians(theta)</span>
+        <span class="s1">n = self.oblique_ratio</span>
+        <span class="s1">self.radial_vel = (self.omega*cos(theta))/(sqrt(pow(n</span><span class="s0">, </span><span class="s2">2</span><span class="s1">)-pow(sin(theta)</span><span class="s0">, </span><span class="s2">2</span><span class="s1">)))</span>
+        <span class="s0">return </span><span class="s1">self.radial_vel</span>
+
+    <span class="s0">def </span><span class="s1">radial_acceleration(self</span><span class="s0">, </span><span class="s1">theta):</span>
+        <span class="s1">n = self.oblique_ratio</span>
+        <span class="s1">theta = radians(theta)</span>
+        <span class="s1">self.radial_acc = -(pow(self.omega</span><span class="s0">, </span><span class="s2">2</span><span class="s1">)*sin(theta))/n</span>
+        <span class="s0">return </span><span class="s1">self.radial_acc</span>
+</pre>
+</body>
+</html>

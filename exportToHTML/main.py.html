@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">kinematic_analysis</span>
+<span class="s0">import </span><span class="s1">matplotlib.pyplot </span><span class="s0">as </span><span class="s1">plt</span>
+
+<span class="s1">Crank_Radius = float(input(</span><span class="s2">&quot;Enter the crank radius(m): &quot;</span><span class="s1">))</span>
+<span class="s1">Connecting_rod_Length = float(input(</span><span class="s2">&quot;Enter the connecting rod length(m): &quot;</span><span class="s1">))</span>
+<span class="s1">Speed_of_Crank = float(input(</span><span class="s2">&quot;Enter the Speed of crank(rpm): &quot;</span><span class="s1">))</span>
+<span class="s1">velocity_of_piston = []</span>
+<span class="s1">acceleration_of_piston = []</span>
+<span class="s1">velocity_of_connecting_rod = []</span>
+<span class="s1">acceleration_of_connecting_rod = []</span>
+<span class="s1">crank_angle = []</span>
+<span class="s1">Slider_analysis = kinematic_analysis.Slider(Connecting_rod_Length</span><span class="s0">, </span><span class="s1">Crank_Radius</span><span class="s0">, </span><span class="s1">Speed_of_Crank)</span>
+<span class="s1">Connecting_rod = kinematic_analysis.Connecting_rod(Connecting_rod_Length</span><span class="s0">, </span><span class="s1">Crank_Radius</span><span class="s0">, </span><span class="s1">Speed_of_Crank)</span>
+
+<span class="s0">for </span><span class="s1">angle </span><span class="s0">in </span><span class="s1">range(</span><span class="s3">0</span><span class="s0">, </span><span class="s3">361</span><span class="s0">, </span><span class="s3">30</span><span class="s1">):</span>
+    <span class="s1">Slider_displacement = Slider_analysis.distance_travelled_by_slider(angle)</span>
+    <span class="s1">Slider_velocity = Slider_analysis.velocity(angle)</span>
+    <span class="s1">Slider_acceleration = Slider_analysis.acceleration(angle)</span>
+    <span class="s1">Connecting_rod_angular_displacement = Connecting_rod.angular_displacement(angle)</span>
+    <span class="s1">Connecting_rod_angular_velocity = Connecting_rod.radial_velocity(angle)</span>
+    <span class="s1">Connecting_rod_angular_acceleration = Connecting_rod.radial_acceleration(angle)</span>
+    <span class="s1">velocity_of_piston.append(Slider_velocity)</span>
+    <span class="s1">acceleration_of_piston.append(Slider_acceleration)</span>
+    <span class="s1">velocity_of_connecting_rod.append(Connecting_rod_angular_velocity)</span>
+    <span class="s1">acceleration_of_connecting_rod.append(Connecting_rod_angular_acceleration)</span>
+    <span class="s1">crank_angle.append(angle)</span>
+    <span class="s1">print(</span><span class="s2">f&quot;</span><span class="s0">\n\n</span><span class="s2">## For angle = </span><span class="s0">{</span><span class="s1">angle</span><span class="s0">} </span><span class="s2">##</span><span class="s0">\n </span><span class="s2">--Slider</span><span class="s0">\n </span><span class="s2">Displacement= </span><span class="s0">{</span><span class="s1">Slider_displacement</span><span class="s0">}\n </span><span class="s2">Velocity = </span><span class="s0">{</span><span class="s1">Slider_velocity</span><span class="s0">}\n </span><span class="s2">&quot;</span>
+          <span class="s2">f&quot;Acceleration = </span><span class="s0">{</span><span class="s1">Slider_acceleration</span><span class="s0">} \n\n </span><span class="s2">--Connecting Rod </span><span class="s0">\n </span><span class="s2">&quot;</span>
+          <span class="s2">f&quot;Angular_displacement = </span><span class="s0">{</span><span class="s1">Connecting_rod_angular_displacement</span><span class="s0">} \n </span><span class="s2">&quot;</span>
+          <span class="s2">f&quot;Angular Velocity = </span><span class="s0">{</span><span class="s1">Connecting_rod_angular_velocity</span><span class="s0">} \n</span><span class="s2">&quot;</span>
+          <span class="s2">f&quot;Angular Acceleration = </span><span class="s0">{</span><span class="s1">Connecting_rod_angular_acceleration</span><span class="s0">} \n\n</span><span class="s2">&quot;</span><span class="s1">)</span>
+
+<span class="s1">plt.plot(crank_angle</span><span class="s0">, </span><span class="s1">velocity_of_piston)</span>
+<span class="s1">plt.xlabel(</span><span class="s2">&quot;Crank Angle&quot;</span><span class="s1">)</span>
+<span class="s1">plt.ylabel(</span><span class="s2">&quot;Velocity of piston&quot;</span><span class="s1">)</span>
+<span class="s1">plt.title(</span><span class="s2">&quot;Approx. velocity of Piston v/s Crank angle (θ)&quot;</span><span class="s1">)</span>
+<span class="s1">plt.show()</span>
+<span class="s1">plt.plot(crank_angle</span><span class="s0">, </span><span class="s1">acceleration_of_piston)</span>
+<span class="s1">plt.xlabel(</span><span class="s2">&quot;Crank Angle&quot;</span><span class="s1">)</span>
+<span class="s1">plt.ylabel(</span><span class="s2">&quot;Acceleration of piston&quot;</span><span class="s1">)</span>
+<span class="s1">plt.title(</span><span class="s2">&quot;Approx. acceleration of Piston v/s Crank angle (θ)&quot;</span><span class="s1">)</span>
+<span class="s1">plt.show()</span>
+<span class="s1">plt.plot(crank_angle</span><span class="s0">, </span><span class="s1">velocity_of_connecting_rod)</span>
+<span class="s1">plt.xlabel(</span><span class="s2">&quot;Crank Angle&quot;</span><span class="s1">)</span>
+<span class="s1">plt.ylabel(</span><span class="s2">&quot;Velocity of connecting rod&quot;</span><span class="s1">)</span>
+<span class="s1">plt.title(</span><span class="s2">&quot;Approx. velocity of connecting v/s Crank angle (θ)&quot;</span><span class="s1">)</span>
+<span class="s1">plt.show()</span>
+<span class="s1">plt.plot(crank_angle</span><span class="s0">, </span><span class="s1">acceleration_of_connecting_rod)</span>
+<span class="s1">plt.xlabel(</span><span class="s2">&quot;Crank Angle&quot;</span><span class="s1">)</span>
+<span class="s1">plt.ylabel(</span><span class="s2">&quot;Acceleration of connecting rod&quot;</span><span class="s1">)</span>
+<span class="s1">plt.title(</span><span class="s2">&quot;Approx. acceleration of connecting rod v/s Crank angle (θ)&quot;</span><span class="s1">)</span>
+<span class="s1">plt.show()</span>
+</pre>
+</body>
+</html>
